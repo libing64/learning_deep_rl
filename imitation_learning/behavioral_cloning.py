@@ -387,7 +387,7 @@ class BehavioralCloning:
         Args:
             path: 模型路径
         """
-        checkpoint = torch.load(path)
+        checkpoint = torch.load(path, weights_only=False)
         self.policy.load_state_dict(checkpoint['policy_state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         self.train_history = checkpoint.get('train_history', {'loss': [], 'accuracy': []})
