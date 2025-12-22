@@ -125,12 +125,29 @@ class HighwayExpert:
             # 如果是数组格式
             obs_array = np.array(observation)
 
-        # 重塑为 (vehicles_count, features_per_vehicle)
-        vehicles_count = obs_array.shape[0] // 7  # 7 个特征 per vehicle
-        obs_reshaped = obs_array.reshape(vehicles_count, 7)
+        # 处理不同的观察格式
+        if len(obs_array.shape) == 2:
+            # 如果已经是二维数组 (vehicles_count, features_per_vehicle)
+            obs_reshaped = obs_array
+        elif len(obs_array.shape) == 1:
+            # 如果是一维数组，需要重塑为 (vehicles_count, features_per_vehicle)
+            vehicles_count = obs_array.shape[0] // 7  # 7 个特征 per vehicle
+            if vehicles_count == 0:
+                raise ValueError(
+                    f"Cannot reshape observation array of size {obs_array.shape[0]} "
+                    f"into shape (vehicles_count, 7). "
+                    f"Observation shape: {obs_array.shape}, "
+                    f"First 10 values: {obs_array[:10]}"
+                )
+            obs_reshaped = obs_array.reshape(vehicles_count, 7)
+        else:
+            raise ValueError(
+                f"Unexpected observation shape: {obs_array.shape}. "
+                f"Expected 1D or 2D array."
+            )
 
         vehicles = []
-        for i in range(vehicles_count):
+        for i in range(obs_reshaped.shape[0]):
             vehicle = obs_reshaped[i]
             vehicles.append({
                 'presence': vehicle[0],
