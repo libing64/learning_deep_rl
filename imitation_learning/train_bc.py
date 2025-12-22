@@ -346,8 +346,8 @@ def main():
         # 生成报告
         generate_training_report(config, eval_results, bc_model.train_history)
 
-        print("
-🎉 Training pipeline completed successfully!"        print(f"📂 Results saved to: {config['exp_dir']}")
+        print("🎉 Training pipeline completed successfully!")
+        print(f"📂 Results saved to: {config['exp_dir']}")
 
     except Exception as e:
         print(f"❌ Training failed: {e}")
