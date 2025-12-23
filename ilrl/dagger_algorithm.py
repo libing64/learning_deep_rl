@@ -193,7 +193,7 @@ class DAggerAgent:
     
     def collect_trajectory_with_policy(self,
                                       env: HighwayWrapper,
-                                      expert: HighwayExpert,
+                                      expert: 'HighwayExpert',
                                       max_steps: int = 200,
                                       beta: float = 0.5) -> Dict:
         """
@@ -208,8 +208,8 @@ class DAggerAgent:
         Returns:
             trajectory: 轨迹字典
         """
-        state, info = env.reset()
-        state = env.flatten_observation(state)
+        obs_original, info = env.reset()
+        state = env.flatten_observation(obs_original)
         
         trajectory = {
             'states': [],
@@ -222,11 +222,11 @@ class DAggerAgent:
         step = 0
         
         while not done and step < max_steps:
-            # 使用当前策略选择动作
+            # 使用当前策略选择动作（使用展平的状态）
             policy_action = self.select_action(state, training=True)
             
-            # 获取专家动作
-            expert_action = expert.get_action(state)
+            # 获取专家动作（使用原始观察格式）
+            expert_action = expert.get_action(obs_original)
             
             # 混合动作（beta控制专家参与度）
             if np.random.random() < beta:
@@ -235,9 +235,9 @@ class DAggerAgent:
                 action = policy_action
             
             # 执行动作
-            next_state, reward, terminated, truncated, info = env.step(action)
+            next_obs_original, reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
-            next_state = env.flatten_observation(next_state)
+            next_state = env.flatten_observation(next_obs_original)
             
             # 记录轨迹（使用专家动作作为标签）
             trajectory['states'].append(state.copy())
@@ -246,6 +246,7 @@ class DAggerAgent:
             trajectory['rewards'].append(reward)
             
             state = next_state
+            obs_original = next_obs_original
             step += 1
         
         return trajectory
@@ -361,8 +362,8 @@ def dagger_algorithm(env_name: str = 'highway-v0',
     print(f"   State dimension: {state_dim}")
     print(f"   Action dimension: {action_dim}")
     
-    # 创建专家策略
-    expert = HighwayExpert(env)
+    # 创建专家策略（传递环境名称，而不是环境对象）
+    expert = HighwayExpert(env_name)
     
     # 创建DAgger智能体
     agent = DAggerAgent(state_dim, action_dim, device=device)
