@@ -151,7 +151,9 @@ def compare_with_expert(agent: DAggerAgent,
     """
     print(f"\n📊 Comparing with expert policy for {num_episodes} episodes...")
     
-    expert = HighwayExpert(env)
+    # 获取环境名称
+    env_name = env.env_name if hasattr(env, 'env_name') else 'highway-v0'
+    expert = HighwayExpert(env_name)
     
     # 评估智能体
     agent_results = evaluate_agent(agent, env, num_episodes=num_episodes, render=False)
@@ -161,18 +163,18 @@ def compare_with_expert(agent: DAggerAgent,
     expert_lengths = []
     
     for episode in range(num_episodes):
-        state, info = env.reset()
-        state = env.flatten_observation(state)
+        obs_original, info = env.reset()
+        state = env.flatten_observation(obs_original)
         
         total_reward = 0
         steps = 0
         done = False
         
         while not done:
-            action = expert.get_action(state)
-            state, reward, terminated, truncated, info = env.step(action)
+            action = expert.get_action(obs_original)  # 使用原始观察
+            obs_original, reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
-            state = env.flatten_observation(state)
+            state = env.flatten_observation(obs_original)
             
             total_reward += reward
             steps += 1

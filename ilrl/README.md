@@ -63,8 +63,10 @@ python train_ilrl.py --exp-name dagger_exp2 \
 
 ### 2. 测试模型
 
+#### 2.1 性能测试 (test_ilrl.py)
+
 ```bash
-# 基础测试
+# 基础测试（无渲染，快速评估）
 python test_ilrl.py --model-path models/dagger_exp1_*/dagger_model.pth --episodes 10
 
 # 可视化测试
@@ -81,6 +83,32 @@ python test_ilrl.py --model-path models/dagger_exp1_*/dagger_model.pth --compare
 - `--render`: 启用渲染（可视化）
 - `--delay`: 渲染延迟（秒，默认: 0.05）
 - `--compare-expert`: 与专家策略比较性能
+
+#### 2.2 可视化演示 (demo_ilrl.py)
+
+```bash
+# 基础演示（可视化展示模型效果）
+python demo_ilrl.py --model-path models/dagger_exp1_*/dagger_model.pth --episodes 3
+
+# 与专家策略对比演示
+python demo_ilrl.py --model-path models/dagger_exp1_*/dagger_model.pth --compare-expert --episodes 3
+
+# 自定义演示参数
+python demo_ilrl.py --model-path models/dagger_exp1_*/dagger_model.pth --episodes 5 --delay 0.1
+```
+
+**参数说明：**
+- `--model-path`: 模型文件路径（支持通配符，必需）
+- `--env`: 环境名称（默认: 从配置读取）
+- `--episodes`: 演示回合数（默认: 3）
+- `--delay`: 渲染延迟（秒，默认: 0.05）
+- `--compare-expert`: 与专家策略对比演示（会依次展示模型和专家的表现）
+
+**演示脚本特点：**
+- 实时可视化模型行为
+- 详细的每步信息输出
+- 动作分布统计
+- 与专家策略的直观对比
 
 ## 训练流程
 
