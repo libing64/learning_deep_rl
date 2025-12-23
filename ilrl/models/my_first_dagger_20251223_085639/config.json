@@ -1,0 +1,13 @@
+{
+  "exp_name": "my_first_dagger",
+  "exp_dir": "models/my_first_dagger_20251223_085639",
+  "timestamp": "20251223_085639",
+  "env_name": "highway-v0",
+  "initial_expert_trajectories": 100,
+  "dagger_iterations": 5,
+  "trajectories_per_iteration": 50,
+  "max_steps": 200,
+  "training_epochs": 10,
+  "batch_size": 64,
+  "device": "cpu"
+}
