@@ -19,3 +19,19 @@ python -m rl_zoo3.train --algo dqn  --env SpaceInvadersNoFrameskip-v4 -f logs/ -
 
 # evaluate command 
 !python -m rl_zoo3.enjoy  --algo dqn  --env SpaceInvadersNoFrameskip-v4  --no-render  --n-timesteps 5000  --folder logs/
+
+
+
+#train for BeamRider
+# python -m rl_zoo3.train --algo dqn  --env BeamRiderNoFrameskip-v4 -f logs/ -c dqn.yml
+
+
+# # evaluate for BeamRider
+# !python -m rl_zoo3.enjoy  --algo dqn  --env BeamRiderNoFrameskip-v4  --no-render  --n-timesteps 5000  --folder logs/
+
+
+# #train for Breakout
+# python -m rl_zoo3.train --algo dqn  --env BreakoutNoFrameskip-v4 -f logs/ -c dqn.yml
+
+
+# evaluate for Breakout
